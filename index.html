@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <title>perfect pizza</title>
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="file.css">
+</head>
+
+<body>
+  <main class="container text-center"
+    x-data="{total:0, counter:0, smallpizza:0, mediumpizza:0, largepizza:0, totalpayment:0, checkoutmessage:'',show:false, errormessage:''}">
+    <h1>perfect pizza</h1>
+
+
+
+    <span><b>PizzaCart</b> </span><span x-text="counter"></span>
+    <div>
+      <p>small</p><span x-text="smallpizza"></span>
+      <button type="button" class="btn btn-primary" @click="(counter++), (smallpizza++), (total+=70.00)">+</button>
+      <button type="button" class="btn btn-primary"
+        @click="if(smallpizza > 0){(counter--), (smallpizza--),(total-=70.00)} ">-</button>
+    </div>
+
+    <div>
+      <p>medium</p><span x-text="mediumpizza"></span>
+      <button type="button" class="btn btn-primary" @click="(counter++), (mediumpizza++), (total+=90.00)">+</button>
+      <button type="button" class="btn btn-primary"
+        @click="if(mediumpizza > 0){(counter--), (mediumpizza--), (total-=90.00)}">-</button>
+    </div>
+
+    <div>
+      <p>large</p><span x-text="largepizza"></span>
+      <button type="button" class="btn btn-primary" @click="(counter++), (largepizza++), (total+=180.00)">+</button>
+      <button type="button" class="btn btn-primary"
+        @click="if(largepizza > 0){(counter--), (largepizza--), (total-=180.00)}">-</button>
+    </div>
+    <span>total </span><span x-text="total"></span>
+
+    <div>
+
+
+      <P x-text="checkoutmessage"></P>
+      <P x-text="errormessage"></P>
+    </div>
+    <button x-show="total >0"
+      @click="if(total > 0){show=!show}else{errormessage='please add items to your cart'}">checkout</button>
+    <div x-show="show">
+      <label>payment amount</label>
+      <input type="number" x-model="totalpayment">
+      <button
+        @click="if(totalpayment >= total){checkoutmessage='enjoy your pizza';total=0, counter=0, smallpizza=0, mediumpizza=0, largepizza=0, totalpayment=0, show=!show, setTimeout(function(){checkoutmessage=''}, 3000 )}else{checkoutmessage='Sorry - that is not enough money!', setTimeout(function(){checkoutmessage=''}, 3000 ) }">pay</button>
+    </div>
+
+
+    </div>
+
+    <section class="pizza">
+
+      <section class="section-1 section">
+
+
+
+        <figure>
+          <img src="https://th.bing.com/th/id/OIP.dCSbeYAo90p-9qKXWehCwAAAAA?pid=ImgDet&w=183&h=177&c=7" />
+        </figure>
+        <h2>small pizza</h2>
+        <h3>R70</h3>
+        <P>small pizza with 3 toppings
+          1 meat topping
+          3 or less other toppings
+
+        </P>
+        <button type="button" class="btn btn-success" @click="(counter++), (smallpizza++),(total+=70.00)">Buy</button>
+
+
+      </section>
+
+      <section class="section-2 section">
+
+
+
+        <figure>
+          <img src="https://th.bing.com/th/id/OIP.dCSbeYAo90p-9qKXWehCwAAAAA?pid=ImgDet&w=183&h=177&c=7" />
+        </figure>
+        <h2>medium pizza</h2>
+        <h3>R90</h3>
+        <p>medium margeritha pizza with 3 toppings max. 2 or less meat toppings. 3 or less other toppings.
+
+        </p>
+        <button type="button" class="btn btn-success" @click="(counter++), (mediumpizza++),(total+=90.00)">Buy</button>
+      </section>
+
+      <section class="section-3 section">
+
+
+
+        <figure>
+          <img src="https://th.bing.com/th/id/OIP.dCSbeYAo90p-9qKXWehCwAAAAA?pid=ImgDet&w=183&h=177&c=7" />
+        </figure>
+        <h3>large pizza</h3>
+        <h3>R180</h3>
+        <p>large margeritha pizza with 3 toppings max. 3 meat toppings max. 3 or less other toppings.
+
+        </p>
+        <button type="button" class="btn btn-success" @click="(counter++), (largepizza++), (total+=180.00)">Buy</button>
+
+      </section>
+
+     
+    </section>
+    <div x-data="pizzaCartWithAPIWidget">
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">flavour</th>
+                  <th scope="col">type</th>
+                  <th scope="col">size</th>
+                  <th scope="col">price</th>
+                  <th scope="col">action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template x-for="pizza in PizzaList">
+                  <tr>
+                    <td " x-text="pizza.flavour">/td>
+                    <td " x-text="pizza.type">/td>
+                    <td " x-text="pizza.size">/td>
+                    <td " x-text="pizza.price">/td>
+                    <td ><button>buy</button></td>
+
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+    <section class="footer">
+      <div>
+        <p>contact us at:(021)-541-1000</p>
+        <p>twitter: @perfectpizza</p>
+        <p>facebook: perfectpizza</p>
+        <p>intagram: @perfectpizza</p>
+      </div>
+      <div>
+        <p>pizza plaza</p>
+        <p>newtown</p>
+        <p>midrand</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="index.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+</body>
+
+</html>

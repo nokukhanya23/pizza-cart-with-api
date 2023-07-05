@@ -1,0 +1,37 @@
+body{
+    background-color: rgba(255, 0, 179, 0.836);
+}
+.section{
+    background-color: rgba(205, 208, 255, 0.712);
+    border-radius: 1em;
+    border: 2px solid;
+    padding: 1em;
+    margin: 0.5em;
+    flex: 1;
+}
+.section-1{background-color: mediumturquoise;}
+
+.section-2{background-color:mediumpurple;}
+
+.section-3{background-color: mediumspringgreen;}
+.footer{
+
+    background-color: pink;
+    border-radius: 1em;
+    border: 2px solid; 
+    padding: 1em;
+    margin: 0.5em;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 98%;
+}
+
+.footer div{width: 45%}
+
+@media (min-width:960px){
+    .pizza{
+        display: flex;
+    }
+}
+
