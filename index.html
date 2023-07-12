@@ -11,37 +11,38 @@
   <link rel="stylesheet" href="file.css">
 </head>
 
-<body>
+<body >
   <main class="container text-center"
     x-data="{total:0, counter:0, smallpizza:0, mediumpizza:0, largepizza:0, totalpayment:0, checkoutmessage:'',show:false, errormessage:''}">
     <h1>perfect pizza</h1>
 
 
 
-    <span><b>PizzaCart</b> </span><span x-text="counter"></span>
-    <div>
+    <!-- old cart -->
+    <!-- <div x-show="smallpizza > 0">
       <p>small</p><span x-text="smallpizza"></span>
       <button type="button" class="btn btn-primary" @click="(counter++), (smallpizza++), (total+=70.00)">+</button>
       <button type="button" class="btn btn-primary"
         @click="if(smallpizza > 0){(counter--), (smallpizza--),(total-=70.00)} ">-</button>
     </div>
 
-    <div>
+    <div x-show="mediumpizza > 0">
       <p>medium</p><span x-text="mediumpizza"></span>
       <button type="button" class="btn btn-primary" @click="(counter++), (mediumpizza++), (total+=90.00)">+</button>
       <button type="button" class="btn btn-primary"
         @click="if(mediumpizza > 0){(counter--), (mediumpizza--), (total-=90.00)}">-</button>
     </div>
 
-    <div>
+    <div x-show="largepizza > 0">
       <p>large</p><span x-text="largepizza"></span>
       <button type="button" class="btn btn-primary" @click="(counter++), (largepizza++), (total+=180.00)">+</button>
       <button type="button" class="btn btn-primary"
         @click="if(largepizza > 0){(counter--), (largepizza--), (total-=180.00)}">-</button>
     </div>
-    <span>total </span><span x-text="total"></span>
+    <br>
+    <span>total: R</span><span x-text="total"></span> -->
 
-    <div>
+    <!-- <div>
 
 
       <P x-text="checkoutmessage"></P>
@@ -57,7 +58,9 @@
     </div>
 
 
-    </div>
+    </div> -->
+
+
 
     <section class="pizza">
 
@@ -111,34 +114,124 @@
 
       </section>
 
-     
+
     </section>
     <div x-data="pizzaCartWithAPIWidget">
 
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">flavour</th>
-                  <th scope="col">type</th>
-                  <th scope="col">size</th>
-                  <th scope="col">price</th>
-                  <th scope="col">action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template x-for="pizza in PizzaList">
-                  <tr>
-                    <td " x-text="pizza.flavour">/td>
-                    <td " x-text="pizza.type">/td>
-                    <td " x-text="pizza.size">/td>
-                    <td " x-text="pizza.price">/td>
-                    <td ><button>buy</button></td>
 
-                  </tr>
-                </template>
-              </tbody>
-            </table>
-          </div>
+      <!-- <label>User</label> -->
+      <!-- <input x-model="name" placeholder="Enter username" class="form-control-sm"> -->
+      <!-- <button @click="username=name">Login</button> -->
+      <br>
+      <span>Cart id: </span><span x-text="cart_id"></span><br>
+
+      <div>
+         username: <span x-text="username"></span>
+      </div>
+      <a @click="openUserHistory=!openUserHistory"  class="btn btn-info" >view historical carts</a>
+      <!-- user history -->
+      <template x-for="cart in showUserHistory">
+        <div x-show="openUserHistory">
+          <p x-text="cart.id"></p>
+          <p x-text="cart.cart_code"></p>
+          <p x-text="cart.username"></p>
+          <p x-text="cart.status"></p>
+        </div>
+      </template>
+
+
+      <div x-show="open && cart.total.toFixed(2)>0">
+        <h3><b>PizzaCart</b> </h3>
+        <span x-text="counter"></span><span> pizza(s)</span><br>
+
+       
+        <table class="table">
+          <thead>
+            <tr>
+              <th>flavour</th>
+              <th>type</th>
+              <th>size</th>
+              <th>price</th>
+              <th>Quantity</th>
+              <th>action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template x-for="pizza in cart.pizzas">
+              <tr>
+                <td x-text="pizza.flavour"></td>
+                <td x-text="pizza.type"></td>
+                <td x-text="pizza.size"></td>
+                <td x-text="pizza.price"></td>
+                <td x-text="pizza.qty"></td>
+                <td>
+                  <button type="button" class="btn btn-primary" @click="(addPizza(pizza)),(counter++)">+</button>
+                  <button type="button" class="btn btn-primary" @click="if(counter > 0){(removePizza(pizza)),(counter--)}">-</button>
+                </td>
+              </tr>
+            </template>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Total</td>
+              <td><span x-text="cart.total.toFixed(2)"></span></td>
+              <td>
+              <td>
+                <button x-show="!makePayment" x-on:click="makePayment=true">Checkout</button>
+              </td>
+            </tr>
+            <tr x-show="makePayment">
+              <td colspan="6">
+                <div>
+                  <template x-if="checkOutMessage=='Enjoy your pizza'">
+                    <div class="alert alert-success">
+                      <p x-text="checkOutMessage"></p>
+                      <span>Your change is: R</span><span x-text="change"></span>
+                    </div>
+
+                  </template>
+
+                  <template x-if="checkOutMessage== 'Sorry, That is not enough money!'">
+                    <p class="alert alert-danger" x-text="checkOutMessage"></p>
+                  </template>
+                  <div>
+                    <label>Enter Amount</label>
+                    <input class="form-control-sm" type="number" placeholder="Enter Amount" x-model="Amount" />
+                    <button x-on:click="payment" class="">Pay</button>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">flavour</th>
+            <th scope="col">type</th>
+            <th scope="col">size</th>
+            <th scope="col">price</th>
+            <th scope="col">action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="pizza in pizzas">
+            <tr>
+              <td x-text="pizza.flavour">/td>
+              <td x-text="pizza.type">/td>
+              <td x-text="pizza.size">/td>
+              <td x-text="pizza.price">/td>
+              <td><button @click="(addPizza(pizza)),(counter++)">buy</button></td>
+
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
     <section class="footer">
       <div>
         <p>contact us at:(021)-541-1000</p>
