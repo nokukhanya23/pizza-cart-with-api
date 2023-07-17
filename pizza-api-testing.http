@@ -15,7 +15,7 @@ get https://pizza-api.projectcodex.net/api/pizza-cart/username/khanyi
 
 
 # view featured pizzas
-get https://pizza-api.projectcodex.net/api/pizzas/featured
+get https://pizza-api.projectcodex.net/api/pizzas/featured?username=khanyi
 
 
 #post featured pizzas 

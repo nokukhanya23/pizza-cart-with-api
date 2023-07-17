@@ -1,54 +1,101 @@
 document.addEventListener('alpine:init', () => {
   Alpine.data('pizzaCartWithAPIWidget', function () {
     return {
+
+      hideCart: "",
       name: '',
-      username: 'khanyi',
+      username: '',
       pizzas: [],
       showUserHistory: '',
       openUserHistory: false,
-      featuredpizzas: [],
+      showFeaturedpizzas: [],
       cart_id: '',
       cart: { total: 0 },
       checkOutMessage: '',
       makePayment: false,
       Amount: 0,
-      pCount: 0,
+      
+
+      login() {
+        if (this.username.length > 2) {
+          this.createCart();
+          alert("Welcome...");
+        }
+        else {
+          alert("Username too short");
+        }
+      },
+      logout() {
+        if (confirm("Sign out..?") == true) {
+          this.cart_id = '';
+          this.username = '';
+          this.name = '';
+          localStorage['username'] = '';
+          // this.cart_count = 0;
+          // this.userCartContent = [];
+
+        } else {
+          this.cart_id = localStorage['cart_id'];
+          this.username = localStorage['username'];
+        }
+      },
 
       init() {
         axios
           .get('https://pizza-api.projectcodex.net/api/pizzas')
           .then((result) => {
+
+
             this.pizzas = result.data.pizzas
+
           })
           .then(() => {
-            this.UserHistory();
+            this.username = localStorage['username']
+            this.cart_id = localStorage['cart_id']
             return this.createCart();
+
+          })
+          .then(() => {
+            this.featuredPizzas()
           })
       },
 
       featuredPizzas() {
         return axios
-          .get('https://pizza-api.projectcodex.net/api/pizzas/featured')
+          .get(`https://pizza-api.projectcodex.net/api/pizzas/featured?username=${this.username}`)
+          .then((result) => {
+            this.showFeaturedpizzas = result.data;
+            console.log(result.data);
+          })
       },
 
-      postfeaturedPizzas() {
+      postfeaturedPizzas(pizza) {
         return axios
-          .post('https://pizza-api.projectcodex.net/api/pizzas/featured')
+          .post('https://pizza-api.projectcodex.net/api/pizzas/featured', {
+            "username": this.username,
+            "pizza_id": pizza
+          })
+          .then((result) => {
+
+            console.log(result.data)
+            return this.featuredPizzas()
+          })
       },
 
       createCart() {
 
 
         if (!this.username) {
-          // this.cart_id = "Enter Username to create a cart";
+          this.cart_id = "Enter Username to create a cart";
 
           return;
         }
-
+        const username = localStorage['username']
         const cart_id = localStorage['cart_id'];
 
-        if (cart_id) {
+        if (cart_id && username) {
           this.cart_id = cart_id;
+          this.username = username;
         }
         else {
           return axios
@@ -57,6 +104,7 @@ document.addEventListener('alpine:init', () => {
               this.cart_id = result.data.cart_code;
               console.log(this.cart_id)
               localStorage['cart_id'] = this.cart_id;
+              localStorage['username'] = this.username;
             });
         }
 
@@ -70,14 +118,6 @@ document.addEventListener('alpine:init', () => {
           .then((result) => {
             this.cart = result.data;
           });
-      },
-
-      UserHistory() {
-        axios.get(`https://pizza-api.projectcodex.net/api/pizza-cart/username/${this.username}`)
-          .then((result) => {
-            this.showUserHistory = result.data;
-            console.log(this.showUserHistory)
-          })
       },
 
       showCartContent() {
@@ -100,14 +140,6 @@ document.addEventListener('alpine:init', () => {
           .then(() => {
             this.message = "Pizza added to the cart"
             this.showCartContent();
-          })
-          .then(() => {
-
-            return this.featuredPizzas();
-
-          })
-          .then(() => {
-            return this.postfeaturedPizzas();
           })
 
       },
@@ -138,12 +170,15 @@ document.addEventListener('alpine:init', () => {
               this.checkOutMessage = 'Enjoy your pizza';
               this.change = this.Amount - this.cart.total;
               setTimeout(() => {
+                window.location.reload();
+                this.username = localStorage['username'];
                 this.cart.total = 0;
                 this.cart_count = 0;
                 this.cart_id = '';
-                this.localStorage['cart_id']
+                this.localStorage['cart_id'] = '';
                 this.checkOutMessage = '';
-                window.location.reload();
+                this.createCart();
+
               }, 5000);
 
             } else if (this.Amount < this.cart.total) {
