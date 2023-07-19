@@ -29,10 +29,10 @@
       <br><br>
 
       <div x-show="username && cart_id">
-        <span>Cart id: </span><span x-text="localStorage['cart_id']"></span><br>
+        <span>Cart id: </span><span x-text="cart_id"></span><br>
 
 
-        username: <span x-text="localStorage['username']"></span>
+        username: <span x-text="username"></span>
       </div>
 
       <div x-show="hideCart && cart.total.toFixed(2)>0">
@@ -81,12 +81,12 @@
                   <template x-if="checkOutMessage=='Enjoy your pizza'">
                     <div class="alert alert-success">
                       <p x-text="checkOutMessage"></p>
-                      <span>Your change is: R</span><span x-text="change.toFixed(2)</span>
+                      <span>Your change is: R</span><span x-text="change.toFixed(2)"</span>
                     </div>
 
                   </template>
 
-                  <template x-if="checkOutMessage== 'Sorry, That is not enough money!'">
+                  <template x-if="checkOutMessage=='Sorry, That is not enough money!'">
                     <p class="alert alert-danger" x-text="checkOutMessage"></p>
                   </template>
                   <div>
