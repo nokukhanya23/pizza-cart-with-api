@@ -24,14 +24,17 @@
             </div>
             <div class="text-center">
                 <h3>Historical Carts</h3>
+                <div class="row">
                 <template x-for="cart in showUserHistory">
-                    <div>
-                        <p x-text="cart.id"></p>
-                        <p x-text="cart.cart_code"></p>
-                        <p x-text="cart.username"></p>
-                        <p x-text="cart.status"></p><br>
+                    <div class="section-1 col-md-4 ">
+                        <span>Cart ID: </span><span x-text="cart.id"></span><br>
+                        <span>Cart code: </span><span x-text="cart.cart_code"></span><br>
+                        <span>Username: </span><span x-text="cart.username"></span>
+                        <hr>
+                        <br>                        
                     </div>
                 </template>
+                </div>
             </div>
 
         </div>

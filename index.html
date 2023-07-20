@@ -25,7 +25,7 @@
       <button @click="logout()" x-show="username && cart_id">Logout</button>
       <a href="historicalcarts.html" class="btn btn-info" x-show="username && cart_id">view historical carts</a>
 
-      <button x-on:click="hideCart=!hideCart" x-show="open && cart.total.toFixed(2)>0">Show cart</button>
+      <button x-on:click="hideCart=!hideCart" x-show="open && cart.total.toFixed(2)>0 && username && cart_id">Show cart</button>
       <br><br>
 
       <div x-show="username && cart_id">
@@ -35,12 +35,12 @@
         username: <span x-text="username"></span>
       </div>
 
-      <div x-show="hideCart && cart.total.toFixed(2)>0">
+      <div x-show="hideCart && cart.total.toFixed(2)>0 && username && cart_id">
         <h3><b>PizzaCart</b> </h3>
 
 
         <br>
-        <table class="table">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th>flavour</th>
@@ -122,7 +122,7 @@
       </div>
 
 
-      <table class="table" x-show="username && cart_id">
+      <table class="table table-danger" x-show="username && cart_id">
         <thead>
           <tr>
             <th scope="col">flavour</th>
